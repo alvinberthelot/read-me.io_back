@@ -14,6 +14,12 @@ app.get('/api/health', function(req, res) {
   res.sendStatus(200);
 });
 
+app.get('/api/version', function(req, res) {
+  res.status(200);
+  res.setHeader('Content-Type', 'application/json')
+  res.end(JSON.stringify({version: JSON.parse(fs.readFileSync("package.json"))["version"]}))
+});
+
 app.get('/api/extensions', function(req, res) {
   res.setHeader('Content-Type', 'application/json')
   fs.readdir('./src/templates/', function(err, content) {
