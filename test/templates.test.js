@@ -16,14 +16,14 @@ describe('Project Root --> /', function() {
     instance.close();
   });
 
-  describe.skip('GET', function() {
+  describe('GET', function() {
     it(`GIVEN ${urlAPI}
         WHEN send GET request
-        THEN should return 'Hello Ynov'`, function(done) {
+        THEN a list of availables templates`, function(done) {
       superagent.get(`${host}${urlAPI}`)
         .end(function(e, res) {
           expect(res.status).to.eql(200)
-          expect(res.text).to.equal("{['basic','node','java']}")
+          expect(JSON.parse(res.text)).to.eql({templates:['basic','java','node']})
           done()
         })
     })

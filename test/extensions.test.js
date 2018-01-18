@@ -2,7 +2,7 @@ const superagent = require('superagent');
 const expect = require('chai').expect;
 
 let host = 'http://localhost:3000';
-let urlAPI = '/'
+let urlAPI = '/api/extensions'
 
 describe('Project Root --> /', function() {
 
@@ -16,14 +16,14 @@ describe('Project Root --> /', function() {
     instance.close();
   });
 
-  describe.skip('GET', function() {
+  describe('GET', function() {
     it(`GIVEN ${urlAPI}
         WHEN send GET request
-        THEN should return 'Hello Ynov'`, function(done) {
+        THEN should return a JSON object with a list of available `, function(done) {
       superagent.get(`${host}${urlAPI}`)
         .end(function(e, res) {
           expect(res.status).to.eql(200)
-          expect(res.text).to.equal("{['asciidoc','txt','markdown']}")
+          expect(JSON.parse(res.text)).to.eql({extensions:['asciidoc','markdown','txt']})
           done()
         })
     })
