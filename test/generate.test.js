@@ -67,7 +67,7 @@ describe('API generate', function() {
           });
       }
     );
-    
+
     it(`GIVEN ${urlAPI}
         WHEN send GET request with parameters ext=asciidoc and template=xxxx
         THEN should return a 400`,
@@ -79,5 +79,81 @@ describe('API generate', function() {
             done();
           });
       });
-  });
+
+      it(`GIVEN ${urlAPI}
+          WHEN send GET request with one parameters ext=asciidoc
+          THEN should return an asciidoc\\basic template`,
+        function(done) {
+          superagent.get(`${host}${urlAPI}?ext=asciidoc`)
+            .end(function(e, res) {
+              fs.readFile('src/templates/asciidoc/basic.asciidoc', function(err, data) {
+                var resultat = JSON.parse(res.text);
+                expect(res.status).to.eql(200);
+                expect(JSON.parse(res.text)).to.eql({
+                  ext: 'asciidoc',
+                  template: 'basic',
+                  file: data.toString()
+                });
+                done();
+              });
+            });
+        });
+
+        it(`GIVEN ${urlAPI}
+            WHEN send GET request with one parameters ext=asciidoc
+            THEN should return an txt\\basic template`,
+          function(done) {
+            superagent.get(`${host}${urlAPI}?ext=txt`)
+              .end(function(e, res) {
+                fs.readFile('src/templates/txt/basic.txt', function(err, data) {
+                  var resultat = JSON.parse(res.text);
+                  expect(res.status).to.eql(200);
+                  expect(JSON.parse(res.text)).to.eql({
+                    ext: 'txt',
+                    template: 'basic',
+                    file: data.toString()
+                  });
+                  done();
+                });
+              });
+          });
+
+          it(`GIVEN ${urlAPI}
+              WHEN send GET request with one parameters ext=asciidoc
+              THEN should return an asciidoc\\node template`,
+            function(done) {
+              superagent.get(`${host}${urlAPI}?template=node`)
+                .end(function(e, res) {
+                  fs.readFile('src/templates/asciidoc/node.asciidoc', function(err, data) {
+                    var resultat = JSON.parse(res.text);
+                    expect(res.status).to.eql(200);
+                    expect(JSON.parse(res.text)).to.eql({
+                      ext: 'asciidoc',
+                      template: 'node',
+                      file: data.toString()
+                    });
+                    done();
+                  });
+                });
+            });
+
+            it(`GIVEN ${urlAPI}
+                WHEN send GET request with one parameters ext=asciidoc
+                THEN should return an asciidoc\\java template`,
+              function(done) {
+                superagent.get(`${host}${urlAPI}?template=java`)
+                  .end(function(e, res) {
+                    fs.readFile('src/templates/asciidoc/java.asciidoc', function(err, data) {
+                      var resultat = JSON.parse(res.text);
+                      expect(res.status).to.eql(200);
+                      expect(JSON.parse(res.text)).to.eql({
+                        ext: 'asciidoc',
+                        template: 'java',
+                        file: data.toString()
+                      });
+                      done();
+                    });
+                  });
+              });
+    });
 });
