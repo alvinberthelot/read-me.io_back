@@ -27,14 +27,14 @@
   "keywords": [],
   "author": "Alvin Berthelot",
   "contributors": [
+    "Alexandre LePouPon (https://github.com/Alexandre-LePoupon)",
     "Alvin Berthelot (http://alvin.berthelot.rocks)",
     "Arnaud Champleboux (https://github.com/bloodess)",
-    "Alexandre LePouPon (https://github.com/Alexandre-LePoupon)",
-    "Steven Fongue (https://github.com/sfongue)",
-    "Matthieu Fournier (https://github.com/Lordinateur)",
+    "Erwan Raulo (https://github.com/orlando1108)",
     "Mathias Loiret (https://github.com/Mathiasloiret)",
+    "Matthieu Fournier (https://github.com/Lordinateur)",
     "Nicolas Goureau (https://github.com/Killy85)",
-    "Erwan Raulo (https://github.com/orlando1108)"
+    "Steven Fongue (https://github.com/sfongue)"
   ],
   "license": "ISC",
   "bugs": {
