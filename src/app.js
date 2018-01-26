@@ -100,7 +100,7 @@ function getfile(filePath, callback){
 }
 
 function getTemplates(callback){
-  fs.readdir('./src/templates/markdown/', function(err, contents) {
+  fs.readdir('./src/templates/md/', function(err, contents) {
     if(err) {
       callback(err, undefined);
     }else{
