@@ -55,6 +55,48 @@ describe('API generate', function() {
       });
 
     it(`GIVEN ${urlAPI}
+        WHEN send GET request with one parameter ext=asciidoc
+        THEN should fetch the readme in asciidoc format for a basic (by default) project`,
+      function(done) {
+        superagent.get(`${host}${urlAPI}?ext=asciidoc`)
+          .end(function(e, res) {
+            fs.readFile('src/templates/asciidoc/basic.asciidoc', function(err, data) {
+              var resultat = JSON.parse(res.text);
+              expect(res.status).to.eql(200);
+              expect(resultat).to.eql({
+                ext: 'asciidoc',
+                template: 'basic',
+                file: data.toString().split('.isRequired').join(''),
+                var_project: '[{"name":"title","description":"title of your project","match":"${project.title}","required":true},{"name":"description","description":"description of your project","match":"${project.description}","required":false},{"name":"contributors","description":"contributors of your project","match":"${project.contributors}","required":false},{"name":"authors","description":"authors of your project","match":"${project.authors}","required":false},{"name":"license","description":"license of your project","match":"${project.license}","required":false}]'
+              });
+              done();
+            });
+          });
+      }
+    );
+
+    it(`GIVEN ${urlAPI}
+        WHEN send GET request with one parameter template=node
+        THEN should fetch the readme in asciidoc (by default) for a node project`,
+      function(done) {
+        superagent.get(`${host}${urlAPI}?template=node`)
+          .end(function(e, res) {
+            fs.readFile('src/templates/asciidoc/node.asciidoc', function(err, data) {
+              var resultat = JSON.parse(res.text);
+              expect(res.status).to.eql(200);
+              expect(resultat).to.eql({
+                ext: 'asciidoc',
+                template: 'node',
+                file: data.toString().split('.isRequired').join(''),
+                var_project: '[{"name":"title","description":"title of your project","match":"${project.title}","required":true},{"name":"description","description":"description of your project","match":"${project.description}","required":false},{"name":"contributors","description":"contributors of your project","match":"${project.contributors}","required":false},{"name":"authors","description":"authors of your project","match":"${project.authors}","required":false},{"name":"license","description":"license of your project","match":"${project.license}","required":false}]'
+              });
+              done();
+            });
+          });
+      }
+    );
+
+    it(`GIVEN ${urlAPI}
         WHEN send GET request with parameters ext=xxxx and template=basic
         THEN should return a 400`,
       function(done) {
