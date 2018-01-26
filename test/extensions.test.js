@@ -1,16 +1,9 @@
 const superagent = require('superagent');
 const expect = require('chai').expect;
-<<<<<<< HEAD
 const before  = require('mocha').before;
 const after  = require('mocha').after;
 const describe  = require('mocha').describe;
 const it = require('mocha').it;
-=======
-const before  = require('chai').before;
-const after  = require('chai').after;
-const describe  = require('chai').describe;
-const it = require('chai').it;
->>>>>>> fix this f****** eslint
 
 let host = 'http://localhost:3000';
 let urlAPI = '/api/extensions';
