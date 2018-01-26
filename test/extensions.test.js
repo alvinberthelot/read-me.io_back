@@ -27,7 +27,7 @@ describe('API extensions', function() {
       function(done) {
         superagent.get(`${host}${urlAPI}`).end(function(e, res) {
           expect(res.status).to.eql(200);
-          expect(JSON.parse(res.text)).to.eql({extensions:['asciidoc','md','txt']});
+          expect(JSON.parse(res.text)).to.eql({extensions:['adoc','md','txt']});
           done();
         });
       });
