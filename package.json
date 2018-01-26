@@ -25,7 +25,10 @@
     "url": "git+https://github.com/alvinberthelot/read-me.io_back.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Alvin Berthelot",
+  "contributors": [
+    "Alvin Berthelot (http://alvin.berthelot.rocks)"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/alvinberthelot/read-me.io_back/issues"
