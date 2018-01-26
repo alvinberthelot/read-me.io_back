@@ -1,4 +1,4 @@
-# ${project.title}
+# ${project.title.isRequired}
 
 ${project.description}
 
@@ -32,12 +32,12 @@ To start program.
 
 ## Contributing
 
-	{project.contributors}
+	${project.contributors}
 
 ## Authors
 
-	{project.authors}
+	${project.authors}
 
 ## License
 
-	{project.license}
+	${project.license}

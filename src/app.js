@@ -59,7 +59,7 @@ app.get('/api/generate', function(req, res) {
   res.setHeader('Content-Type', 'application/json');
   generate(req.query, (err, resContent) => {
     if(err){
-      res.status(404);
+      res.status(400);
       res.end(JSON.stringify(err));
     }else{
       res.end(JSON.stringify(resContent));
@@ -74,12 +74,13 @@ function generate(data, callback){
     resObj['template'] = getTemplate(data.template);
     resObj['ext'] = getExtention(data.ext);
 
-    getfile(`${resObj['ext']}/${resObj['template']}.${resObj['ext']}`, (err, fileContent) => {
+    getfile(`${templatePath}/${resObj['ext']}/${resObj['template']}.${resObj['ext']}`, (err, fileContent) => {
       if(err) {
         callback(err,undefined);
       } else {
-        resObj['file'] = fileContent;
-        callback(undefined,resObj);
+        resObj['file'] = fileContent.split('.isRequired').join('');
+        resObj['var_project'] = generateJsonTemplate(fileContent);
+        callback(undefined, resObj);
       }
     });
 
@@ -89,7 +90,7 @@ function generate(data, callback){
 }
 
 function getfile(filePath, callback){
-  fs.readFile(`${templatePath}/${filePath}`, (err, data) =>{
+  fs.readFile(filePath, (err, data) =>{
     if(err){
       callback(err, undefined);
     }else{
@@ -118,7 +119,7 @@ function getTemplate(value){
   }else if(tempList.indexOf(value) != -1 ){
     return value;
   }
-  throw {err:'unrecognized template'};
+  throw {err:'Value submitted for parameter template is not recognized, the value should be one these : '+ tempList};
 }
 
 function getExtentions(callback){
@@ -141,7 +142,20 @@ function getExtention(value){
   }else if(extList.indexOf(value) != -1 ){
     return value;
   }
-  throw {err:'unrecognized extension'};
+  throw {err:'Value submitted for parameter extension is not recognized, the value should be one these : '+ extList};
+}
+
+function generateJsonTemplate(stringTemplate){
+  return JSON.stringify( 
+    stringTemplate.split('${')
+      .map(value => value.split('}')[0]
+        .split('.')).slice(1)
+      .map(tagList => {return {
+        name : tagList[1],
+        description : tagList[1] + ' of your ' +  tagList[0],
+        match: '${' + tagList[0] + '.' +  tagList[1] + '}',
+        required : tagList.length > 2
+      };}));
 }
 
 module.exports = app;

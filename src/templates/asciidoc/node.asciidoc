@@ -1,6 +1,6 @@
-= project.title
+= ${project.title.isRequired}
 
-project.description
+${project.description}
 
 == Getting started
 
@@ -22,10 +22,10 @@ To run the unit test of the projet, run :
 == Usage
 
 == Contributing
-{project.contributors}
+${project.contributors}
 
 == Authors
-{project.authors}
+${project.authors}
 
 == License
-{project.license}
+${project.license}
