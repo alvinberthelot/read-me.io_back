@@ -146,16 +146,15 @@ function getExtention(value){
 }
 
 function generateJsonTemplate(stringTemplate){
-  return JSON.stringify( 
-    stringTemplate.split('${')
-      .map(value => value.split('}')[0]
-        .split('.')).slice(1)
-      .map(tagList => {return {
-        name : tagList[1],
-        description : tagList[1] + ' of your ' +  tagList[0],
-        match: '${' + tagList[0] + '.' +  tagList[1] + '}',
-        required : tagList.length > 2
-      };}));
+  return stringTemplate.split('${')
+    .map(value => value.split('}')[0]
+      .split('.')).slice(1)
+    .map(tagList => ({
+      name : tagList[1],
+      description : tagList[1] + ' of your ' +  tagList[0],
+      match: '${' + tagList[0] + '.' +  tagList[1] + '}',
+      required : tagList.length > 2
+    }));
 }
 
 module.exports = app;
