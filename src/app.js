@@ -44,10 +44,10 @@ app.get('/api/extensions', function(req, res) {
 app.get('/api/templates', function(req, res) {
   res.setHeader('Content-Type', 'application/json');
   getTemplates((err, listTemplates)=>{
-    if(err){
+    if(err) {
       res.status(500);
       res.end(JSON.stringify(err));
-    }else{
+    } else {
       res.status(200);
       res.send(JSON.stringify({ templates: listTemplates}));
     }
@@ -58,29 +58,32 @@ app.get('/api/generate', function(req, res) {
   res.status(200);
   res.setHeader('Content-Type', 'application/json');
   generate(req.query, (err, resContent) => {
-    if(err){
+    if(err) {
       res.status(400);
       res.end(JSON.stringify(err));
-    }else{
+    } else {
       res.end(JSON.stringify(resContent));
     }
-
   });
 });
 
-function generate(data, callback){
-  var resObj = {};
+function generate(data, callback) {
   try {
-    resObj['template'] = getTemplate(data.template);
-    resObj['ext'] = getExtention(data.ext);
+    const template = getTemplate(data.template);
+    const ext = getExtention(data.ext);
 
-    getfile(`${templatePath}/${resObj['ext']}/${resObj['template']}.${resObj['ext']}`, (err, fileContent) => {
+    getfile(`${templatePath}/${ext}/${template}.${ext}`, (err, fileContent) => {
       if(err) {
-        callback(err,undefined);
+        callback(err, undefined);
       } else {
-        resObj['file'] = fileContent.split('.isRequired').join('');
-        resObj['var_project'] = generateJsonTemplate(fileContent);
-        callback(undefined, resObj);
+        const file = fileContent.split('.isRequired').join('');
+        const variables = generateJsonTemplate(fileContent);
+        callback(undefined, {
+          template: template,
+          ext: ext,
+          file: file,
+          var_project: variables
+        });
       }
     });
 
@@ -99,15 +102,12 @@ function getfile(filePath, callback){
   });
 }
 
-function getTemplates(callback){
-  fs.readdir('./src/templates/md/', function(err, contents) {
+function getTemplates(callback) {
+  fs.readdir(`${templatePath}/md/`, function(err, contents) {
     if(err) {
       callback(err, undefined);
-    }else{
-      var listTemplates = [];
-      for(var i=0; i<contents.length; i++) {
-        listTemplates.push(contents[i].split('.')[0]);
-      }
+    } else {
+      const listTemplates = contents.map(file => file.split('.')[0]);
       callback(undefined, listTemplates );
     }
   });
@@ -119,11 +119,13 @@ function getTemplate(value){
   }else if(tempList.indexOf(value) != -1 ){
     return value;
   }
-  throw {err:'Value submitted for parameter template is not recognized, the value should be one these : '+ tempList};
+  throw {
+    err: `Value submitted for parameter template is not recognized, the value should be one these : ${tempList.join(', ')}`
+  };
 }
 
 function getExtentions(callback){
-  fs.readdir('./src/templates/', function(err, content) {
+  fs.readdir(templatePath, function(err, content) {
     if(err) {
       callback(err, undefined);
     }else{
@@ -138,11 +140,13 @@ function getExtentions(callback){
 
 function getExtention(value){
   if(value == undefined){
-    return 'asciidoc';
+    return 'adoc';
   }else if(extList.indexOf(value) != -1 ){
     return value;
   }
-  throw {err:'Value submitted for parameter extension is not recognized, the value should be one these : '+ extList};
+  throw {
+    err: `Value submitted for parameter extension is not recognized, the value should be one these : ${extList.join(', ')}`
+  };
 }
 
 function generateJsonTemplate(stringTemplate){

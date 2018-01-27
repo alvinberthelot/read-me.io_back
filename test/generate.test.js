@@ -35,16 +35,16 @@ describe('API generate', function() {
       });
 
     it(`GIVEN ${urlAPI}
-        WHEN send GET request with parameters ext=asciidoc and template=basic
-        THEN should fetch the readme in asciidoc format for a basic project`,
+        WHEN send GET request with parameters ext=adoc and template=basic
+        THEN should fetch the readme in adoc format for a basic project`,
       function(done) {
-        superagent.get(`${host}${urlAPI}?ext=asciidoc&template=basic`)
+        superagent.get(`${host}${urlAPI}?ext=adoc&template=basic`)
           .end(function(e, res) {
-            fs.readFile('src/templates/asciidoc/basic.asciidoc', function(err, data) {
+            fs.readFile('src/templates/adoc/basic.adoc', function(err, data) {
               var resultat = JSON.parse(res.text);
               expect(res.status).to.eql(200);
               expect(resultat).to.eql({
-                ext: 'asciidoc',
+                ext: 'adoc',
                 template: 'basic',
                 file: data.toString().split('.isRequired').join(''),
                 var_project: [{'name':'title','description':'title of your project','match':'${project.title}','required':true},{'name':'description','description':'description of your project','match':'${project.description}','required':false},{'name':'contributors','description':'contributors of your project','match':'${project.contributors}','required':false},{'name':'authors','description':'authors of your project','match':'${project.authors}','required':false},{'name':'license','description':'license of your project','match':'${project.license}','required':false}]
@@ -55,16 +55,16 @@ describe('API generate', function() {
       });
 
     it(`GIVEN ${urlAPI}
-        WHEN send GET request with one parameter ext=asciidoc
-        THEN should fetch the readme in asciidoc format for a basic (by default) project`,
+        WHEN send GET request with one parameter ext=adoc
+        THEN should fetch the readme in adoc format for a basic (by default) project`,
       function(done) {
-        superagent.get(`${host}${urlAPI}?ext=asciidoc`)
+        superagent.get(`${host}${urlAPI}?ext=adoc`)
           .end(function(e, res) {
-            fs.readFile('src/templates/asciidoc/basic.asciidoc', function(err, data) {
+            fs.readFile('src/templates/adoc/basic.adoc', function(err, data) {
               var resultat = JSON.parse(res.text);
               expect(res.status).to.eql(200);
               expect(resultat).to.eql({
-                ext: 'asciidoc',
+                ext: 'adoc',
                 template: 'basic',
                 file: data.toString().split('.isRequired').join(''),
                 var_project: [{'name':'title','description':'title of your project','match':'${project.title}','required':true},{'name':'description','description':'description of your project','match':'${project.description}','required':false},{'name':'contributors','description':'contributors of your project','match':'${project.contributors}','required':false},{'name':'authors','description':'authors of your project','match':'${project.authors}','required':false},{'name':'license','description':'license of your project','match':'${project.license}','required':false}]
@@ -77,15 +77,15 @@ describe('API generate', function() {
 
     it(`GIVEN ${urlAPI}
         WHEN send GET request with one parameter template=node
-        THEN should fetch the readme in asciidoc (by default) for a node project`,
+        THEN should fetch the readme in adoc (by default) for a node project`,
       function(done) {
         superagent.get(`${host}${urlAPI}?template=node`)
           .end(function(e, res) {
-            fs.readFile('src/templates/asciidoc/node.asciidoc', function(err, data) {
+            fs.readFile('src/templates/adoc/node.adoc', function(err, data) {
               var resultat = JSON.parse(res.text);
               expect(res.status).to.eql(200);
               expect(resultat).to.eql({
-                ext: 'asciidoc',
+                ext: 'adoc',
                 template: 'node',
                 file: data.toString().split('.isRequired').join(''),
                 var_project: [{'name':'title','description':'title of your project','match':'${project.title}','required':true},{'name':'description','description':'description of your project','match':'${project.description}','required':false},{'name':'contributors','description':'contributors of your project','match':'${project.contributors}','required':false},{'name':'authors','description':'authors of your project','match':'${project.authors}','required':false},{'name':'license','description':'license of your project','match':'${project.license}','required':false}]
@@ -104,7 +104,7 @@ describe('API generate', function() {
           .end(function(e, res) {
             expect(res.status).to.eql(400);
             expect(JSON.parse(res.text)).to.eql({
-              err:'Value submitted for parameter extension is not recognized, the value should be one these : asciidoc,markdown,txt'
+              err: 'Value submitted for parameter extension is not recognized, the value should be one these : adoc, md, txt'
             });
             done();
           });
@@ -112,13 +112,15 @@ describe('API generate', function() {
     );
 
     it(`GIVEN ${urlAPI}
-        WHEN send GET request with parameters ext=asciidoc and template=xxxx
+        WHEN send GET request with parameters ext=adoc and template=xxxx
         THEN should return a 400`,
       function(done) {
-        superagent.get(`${host}${urlAPI}?ext=asciidoc&template=xxxx`)
+        superagent.get(`${host}${urlAPI}?ext=adoc&template=xxxx`)
           .end(function(e, res) {
             expect(res.status).to.eql(400);
-            expect(JSON.parse(res.text)).to.eql({err:'Value submitted for parameter template is not recognized, the value should be one these : basic,csharp,java,node,python'});
+            expect(JSON.parse(res.text)).to.eql({
+              err: 'Value submitted for parameter template is not recognized, the value should be one these : basic, csharp, java, node, python'
+            });
             done();
           });
       });
