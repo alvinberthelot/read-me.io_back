@@ -6,7 +6,9 @@ const cors = require('cors')
 const templatePath = 'src/templates'
 const pjson = require('./../package.json')
 
-app.use(enforce.HTTPS({ trustProtoHeader: true }))
+if (process.env.NODE_ENV === 'production') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }))
+}
 
 var tempList = ['basic']
 getTemplates((err, templates) => {
